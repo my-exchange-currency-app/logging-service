@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -21,6 +22,7 @@ public class EntityAudit {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
+    @DateTimeFormat(pattern = "dd-M-yyyy hh:mm:ss")
     private Date createdDate;
 
     @CreatedBy
@@ -30,6 +32,7 @@ public class EntityAudit {
     private Long createdById;
 
     @LastModifiedDate
+    @DateTimeFormat(pattern = "dd-M-yyyy hh:mm:ss")
     private Date lastModifiedDate;
 
     @LastModifiedBy

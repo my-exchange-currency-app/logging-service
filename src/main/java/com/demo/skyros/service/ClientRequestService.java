@@ -15,14 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ClientRequestService {
 
     private static final String REQUEST_ID = "REQUEST_ID";
     Logger logger = LoggerFactory.getLogger(ClientRequestService.class);
-    GsonBuilder builder = new GsonBuilder();
-    Gson gson = builder.create();
+    private GsonBuilder builder = new GsonBuilder();
+    private Gson gson = builder.create();
     private ClientRequestRepo clientRequestRepo;
 
     public ClientRequestService(ClientRequestRepo clientRequestRepo) {
@@ -38,6 +39,10 @@ public class ClientRequestService {
         clientRequest.setRequestBody(gson.toJson(currencyExchangeVO));
         clientRequest.setAudit(prepareAudit());
         getClientRequestRepo().save(clientRequest);
+    }
+
+    public List<ClientRequestEntity> findClientRequestPerDate(Date from, Date to) {
+        return getClientRequestRepo().findByAuditCreatedDateBetween(from, to);
     }
 
     public void saveClientRequest(String requestPath, String requestId) {
@@ -103,5 +108,21 @@ public class ClientRequestService {
 
     public void setClientRequestRepo(ClientRequestRepo clientRequestRepo) {
         this.clientRequestRepo = clientRequestRepo;
+    }
+
+    public GsonBuilder getBuilder() {
+        return builder;
+    }
+
+    public void setBuilder(GsonBuilder builder) {
+        this.builder = builder;
+    }
+
+    public Gson getGson() {
+        return gson;
+    }
+
+    public void setGson(Gson gson) {
+        this.gson = gson;
     }
 }
