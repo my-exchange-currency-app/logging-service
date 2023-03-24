@@ -1,23 +1,21 @@
 package com.demo.skyros.vo;
 
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 import java.util.List;
 
 public class CurrencyReportVO {
 
-    private List<CurrencyExchangeVO> currencyExchangeVO;
+    private List<CurrencyExchangeVO> currencyExchangeVOList;
     private Date from;
     private Date to;
 
-    public List<CurrencyExchangeVO> getCurrencyExchangeVO() {
-        return currencyExchangeVO;
+    public List<CurrencyExchangeVO> getCurrencyExchangeVOList() {
+        return currencyExchangeVOList;
     }
 
-    public void setCurrencyExchangeVO(List<CurrencyExchangeVO> currencyExchangeVO) {
-        this.currencyExchangeVO = currencyExchangeVO;
+    public void setCurrencyExchangeVOList(List<CurrencyExchangeVO> currencyExchangeVOList) {
+        this.currencyExchangeVOList = currencyExchangeVOList;
     }
 
     public Date getFrom() {
