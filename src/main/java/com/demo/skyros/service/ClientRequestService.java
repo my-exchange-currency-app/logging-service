@@ -65,6 +65,16 @@ public class ClientRequestService {
         }
     }
 
+    public void saveClientRequest(String requestId, CurrencyExchangeVO vo) {
+        if (null != requestId) {
+            ClientRequestEntity clientRequest = new ClientRequestEntity();
+            clientRequest.setRequestId(requestId);
+            clientRequest.setRequestBody(gson.toJson(vo));
+            clientRequest.setAudit(prepareAudit());
+            getClientRequestRepo().save(clientRequest);
+        }
+    }
+
     public String prepareRequestBody(HttpServletRequest request) {
         try {
             return IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);

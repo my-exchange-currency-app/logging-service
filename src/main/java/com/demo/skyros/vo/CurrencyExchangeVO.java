@@ -11,6 +11,7 @@ public class CurrencyExchangeVO {
     private BigDecimal totalCalculatedAmount;
     private BigDecimal quantity;
     private String environment;
+    private String tag;
 
     public CurrencyExchangeVO() {
     }
@@ -84,6 +85,14 @@ public class CurrencyExchangeVO {
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @Override
