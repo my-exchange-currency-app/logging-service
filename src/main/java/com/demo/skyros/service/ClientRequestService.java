@@ -4,16 +4,15 @@ import com.demo.skyros.entity.ClientRequestEntity;
 import com.demo.skyros.entity.EntityAudit;
 import com.demo.skyros.repo.ClientRequestRepo;
 import com.demo.skyros.vo.CurrencyExchangeVO;
+import com.demo.skyros.vo.RequestVO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -45,43 +44,15 @@ public class ClientRequestService {
         return getClientRequestRepo().findByAuditCreatedDateBetween(from, to);
     }
 
-    public void saveClientRequest(String requestPath, String requestId) {
-        if (null != requestId) {
-            String[] pathList = requestPath.split("/");
-            CurrencyExchangeVO currencyExchangeVO = prepareCurrencyExchangeVO(pathList);
+    public void saveClientRequest(RequestVO requestVO) {
+        if (null != requestVO.getRequestId()) {
             ClientRequestEntity clientRequest = new ClientRequestEntity();
-
-            if (requestPath.contains("currency-conversion")) {
-                clientRequest.setTag("conversion");
-            }
-            if (requestPath.contains("currency-exchange")) {
-                clientRequest.setTag("exchange");
-            }
-
-            clientRequest.setRequestId(requestId);
-            clientRequest.setRequestBody(gson.toJson(currencyExchangeVO));
+            clientRequest.setRequestId(requestVO.getRequestId());
+            clientRequest.setTag(requestVO.getTag());
+            clientRequest.setRequestBody(requestVO.getRequestBody());
             clientRequest.setAudit(prepareAudit());
             getClientRequestRepo().save(clientRequest);
         }
-    }
-
-    public void saveClientRequest(String requestId, CurrencyExchangeVO vo) {
-        if (null != requestId) {
-            ClientRequestEntity clientRequest = new ClientRequestEntity();
-            clientRequest.setRequestId(requestId);
-            clientRequest.setRequestBody(gson.toJson(vo));
-            clientRequest.setAudit(prepareAudit());
-            getClientRequestRepo().save(clientRequest);
-        }
-    }
-
-    public String prepareRequestBody(HttpServletRequest request) {
-        try {
-            return IOUtils.toString(request.getInputStream(), StandardCharsets.UTF_8);
-        } catch (Exception ex) {
-            logger.error("failed to prepare requestBody", ex.getMessage());
-        }
-        return null;
     }
 
     public CurrencyExchangeVO prepareCurrencyExchangeVO(String[] pathList) {
