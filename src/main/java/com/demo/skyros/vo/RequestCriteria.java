@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestVO {
+public class RequestCriteria {
 
-    private String requestId;
-    private String requestBody;
-    private String tag;
+    private Date from;
+    private Date to;
 
 }

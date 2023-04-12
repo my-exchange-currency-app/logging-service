@@ -4,9 +4,12 @@ import com.demo.skyros.entity.ClientRequestEntity;
 import com.demo.skyros.entity.EntityAudit;
 import com.demo.skyros.repo.ClientRequestRepo;
 import com.demo.skyros.vo.CurrencyExchangeVO;
+import com.demo.skyros.vo.RequestCriteria;
 import com.demo.skyros.vo.RequestVO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Getter
+@Setter
 public class ClientRequestService {
 
     private static final String REQUEST_ID = "REQUEST_ID";
@@ -29,19 +34,8 @@ public class ClientRequestService {
         this.clientRequestRepo = clientRequestRepo;
     }
 
-    public void saveClientRequest(HttpServletRequest request, String tag) {
-        String[] pathList = request.getRequestURI().split("/");
-        ClientRequestEntity clientRequest = new ClientRequestEntity();
-        clientRequest.setTag(tag);
-        clientRequest.setRequestId(request.getHeader(REQUEST_ID));
-        CurrencyExchangeVO currencyExchangeVO = prepareCurrencyExchangeVO(pathList);
-        clientRequest.setRequestBody(gson.toJson(currencyExchangeVO));
-        clientRequest.setAudit(prepareAudit());
-        getClientRequestRepo().save(clientRequest);
-    }
-
-    public List<ClientRequestEntity> findClientRequestPerDate(Date from, Date to) {
-        return getClientRequestRepo().findByAuditCreatedDateBetween(from, to);
+    public List<ClientRequestEntity> findClientRequestPerDate(RequestCriteria criteria) {
+        return getClientRequestRepo().findByAuditCreatedDateBetween(criteria.getFrom(), criteria.getTo());
     }
 
     public void saveClientRequest(RequestVO requestVO) {
@@ -55,6 +49,19 @@ public class ClientRequestService {
         }
     }
 
+    @Deprecated
+    public void saveClientRequest(HttpServletRequest request, String tag) {
+        String[] pathList = request.getRequestURI().split("/");
+        ClientRequestEntity clientRequest = new ClientRequestEntity();
+        clientRequest.setTag(tag);
+        clientRequest.setRequestId(request.getHeader(REQUEST_ID));
+        CurrencyExchangeVO currencyExchangeVO = prepareCurrencyExchangeVO(pathList);
+        clientRequest.setRequestBody(gson.toJson(currencyExchangeVO));
+        clientRequest.setAudit(prepareAudit());
+        getClientRequestRepo().save(clientRequest);
+    }
+
+    @Deprecated
     public CurrencyExchangeVO prepareCurrencyExchangeVO(String[] pathList) {
         CurrencyExchangeVO currencyExchangeVO = new CurrencyExchangeVO();
         for (int i = 0; i < pathList.length; i++) {
@@ -83,27 +90,4 @@ public class ClientRequestService {
         return audit;
     }
 
-    public ClientRequestRepo getClientRequestRepo() {
-        return clientRequestRepo;
-    }
-
-    public void setClientRequestRepo(ClientRequestRepo clientRequestRepo) {
-        this.clientRequestRepo = clientRequestRepo;
-    }
-
-    public GsonBuilder getBuilder() {
-        return builder;
-    }
-
-    public void setBuilder(GsonBuilder builder) {
-        this.builder = builder;
-    }
-
-    public Gson getGson() {
-        return gson;
-    }
-
-    public void setGson(Gson gson) {
-        this.gson = gson;
-    }
 }
