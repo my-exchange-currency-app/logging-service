@@ -1,12 +1,12 @@
 package com.demo.skyros.controller;
 
-import com.demo.skyros.entity.ClientRequestEntity;
 import com.demo.skyros.service.ClientRequestService;
 import com.demo.skyros.vo.RequestCriteria;
 import com.demo.skyros.vo.RequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,8 +17,13 @@ public class LoggingController {
     private ClientRequestService clientRequestService;
 
     @GetMapping("find")
-    public List<ClientRequestEntity> findClientRequestPerDate(@RequestBody RequestCriteria criteria) {
+    public List<RequestVO> findClientRequestPerDate(@RequestBody RequestCriteria criteria) {
         return clientRequestService.findClientRequestPerDate(criteria);
+    }
+
+    @GetMapping("findAll")
+    public List<RequestVO> findAll() {
+        return clientRequestService.findAll();
     }
 
     @PostMapping("add")

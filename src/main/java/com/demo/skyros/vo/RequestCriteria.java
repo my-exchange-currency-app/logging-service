@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -13,7 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class RequestCriteria {
 
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date from;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date to;
 
 }

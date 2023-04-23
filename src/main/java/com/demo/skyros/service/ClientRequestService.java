@@ -2,6 +2,7 @@ package com.demo.skyros.service;
 
 import com.demo.skyros.entity.ClientRequestEntity;
 import com.demo.skyros.entity.EntityAudit;
+import com.demo.skyros.mapper.RequestMapper;
 import com.demo.skyros.repo.ClientRequestRepo;
 import com.demo.skyros.vo.CurrencyExchangeVO;
 import com.demo.skyros.vo.RequestCriteria;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,13 +31,20 @@ public class ClientRequestService {
     private GsonBuilder builder = new GsonBuilder();
     private Gson gson = builder.create();
     private ClientRequestRepo clientRequestRepo;
+    @Autowired
+    private RequestMapper requestMapper;
 
     public ClientRequestService(ClientRequestRepo clientRequestRepo) {
         this.clientRequestRepo = clientRequestRepo;
     }
 
-    public List<ClientRequestEntity> findClientRequestPerDate(RequestCriteria criteria) {
-        return getClientRequestRepo().findByAuditCreatedDateBetween(criteria.getFrom(), criteria.getTo());
+    public List<RequestVO> findClientRequestPerDate(RequestCriteria criteria) {
+        List<ClientRequestEntity> requestEntities = getClientRequestRepo().findByAuditCreatedDateBetween(criteria.getFrom(), criteria.getTo());
+        return getRequestMapper().entityListToVOList(requestEntities);
+    }
+
+    public List<RequestVO> findAll() {
+        return getRequestMapper().entityListToVOList(getClientRequestRepo().findAll());
     }
 
     public void saveClientRequest(RequestVO requestVO) {
